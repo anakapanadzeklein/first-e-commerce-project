@@ -9,8 +9,10 @@ const Product: React.FC = () => {
 
   const [selectedColor, setSelectedColor] = useState <string | null> (null);
 
-  const [selectedSize, setSelectedSize] = useState<string | null>(null);
+  const [selectedSize, setSelectedSize] = useState <string | null> (null);
   const sizes = ['S', 'M', 'L', 'XL', 'XXL'];
+
+  const [selectedButton, setSelectedButton] = useState <string | null> (null);
 
 
   if (!product) {
@@ -19,7 +21,7 @@ const Product: React.FC = () => {
 
   return (    
     <main className='mx-auto max-w-[1440px] px-5'>
-      <section className='w-full gap-16' style={{ backgroundColor: '#FFF', paddingBottom: '200px' }}>
+      <section className='w-full gap-16' style={{ backgroundColor: '#FFF', paddingBottom: '120px' }}>
           <div className='flex items-center gap-3 mt-8 mx-28'>
             <span className='text-slate-500'> Ecommerce </span>
             <img src="/images/Vector-right.png" alt="right-arrow" className='w-2 h-3' />
@@ -111,14 +113,132 @@ const Product: React.FC = () => {
                  
 
                   <span className='text-xs font-medium text-slate-500 ms-2'>— Free shipping on orders $100+</span>
-
- 
               </div>
             </div>
           </div>
       </section>
+
+
+
+
+
+
+
+      <section className='w-full gap-16' style={{ backgroundColor: '#FFF', paddingBottom: '200px' }}>
+        <div className='flex items-center gap-3 mt-8 mx-28'>
+
+
+          <div className='w-60 h-24 flex flex-col justify-between'>
+            <button className={`flex items-center gap-2 w-60 h-10 rounded-md ps-6 bg-white transition duration-150 ${selectedButton === "details" ? 'bg-[#F6F6F6]' : ''}`} onClick={() => setSelectedButton("details")}>
+              <img src="/images/three-dots.png" alt="three-dots" />
+              <span> Details </span>
+            </button>
+
+            <button className={`flex items-center gap-2 w-60 h-10 rounded-md ps-6 bg-white transition duration-150 ${selectedButton === "reviews" ? 'bg-[#F6F6F6]' : ''}`} onClick={() => setSelectedButton("reviews")}>
+              <img src="/images/Empty-Star.png" alt="empty-star" />
+              <span> Reviews </span>
+            </button>
+          </div>
+
+
+          <div>
+            {selectedButton === "details" ? (
+               <div className='ms-8 flex flex-col' style={{ width: '727px' }}> 
+                  <h1 className='font-medium mb-6'> Detail </h1>
+
+                  <div className='flex flex-col'>
+                      <span className='text-s font-normal text-slate-400'> 
+                        Elevate your everyday style with our Men's Black T-Shirts, the ultimate wardrobe essential for modern men. 
+                        Crafted with meticulous attention to detail and designed for comfort,
+                        these versatile black tees are a must-have addition to your collection.
+                      </span>
+                      <span className='text-s font-normal text-slate-400'>
+                        The classic black color never goes out of style. Whether you're dressing up for a special occasion or keeping it casual, 
+                        these black t-shirts are the perfect choice, effortlessly complementing any outfit.
+                      </span>
+                  </div>
+
+                  <ul className='list-disc text-s font-normal text-slate-400 mt-16 ms-6'>
+                    <li> Premium Quality </li>
+                    <li> Versatile Wardrobe Staple </li>
+                    <li> Available in Various Sizes </li>
+                    <li> Tailored Fit </li>
+                  </ul>
+
+               </div>
+            ) : 
+            <div className='ms-8' style={{ width: '727px' }}>
+            <div>
+              <div className="flex flex-col gap-4">
+                <h2 className='font-medium mb-2'>Reviews</h2>
+                <div className="flex gap-3">
+                  <h2 className="text-secondary font-bold text-3xl">4.2</h2>
+                  <span className="text-gray-400 py-3">- 54 reviews</span>
+                </div>
+                <button className="w-36 h-11 py-3 px-5 mb-6 mt-4 border border-black text-sm text-secondary font-medium rounded-md transition duration-150 hover:bg-slate-50 active:bg-white">
+                    Write a review
+                  </button>
+          
+                <div className="border-t flex flex-col gap-6 items-center">
+
+                  <div className='flex items-start mt-14' style={{ width: '727px' }}>
+                    <img src="/images/Avatar.png" alt="avatar" className="mr-3" />
+                    <div className='flex flex-col flex-grow'>
+                      <span className="font-semibold">Emily Davis</span>
+                      <span className="text-sm text-gray-400 mt-2">1 WEEK AGO</span>
+                      <p className="text-gray-500 mt-4">This company always goes above and beyond to satisfy their customers.</p>
+                    </div>
+                    <img src="/images/review-stars.png" alt="review-stars" className="ml-3" />
+                  </div>
+
+          
+                  <div className='flex items-start mt-14' style={{ width: '727px' }}>
+                    <img src="/images/Avatar.png" alt="avatar" className="mr-3" />
+                    <div className='flex flex-col flex-grow'>
+                      <span className="font-semibold">Daniel Smith</span>
+                      <span className="text-sm text-gray-400 mt-2">2 MONTHS AGO</span>
+                      <p className="text-gray-500 mt-4">I can't believe how affordable and high-quality this item is!</p>
+                    </div>
+                    <img src="/images/review-stars.png" alt="review-stars" />
+                  </div>
+          
+                  <div className='flex items-start mt-14' style={{ width: '727px' }}>
+                    <img src="/images/Avatar.png" alt="avatar" className="mr-3" />
+                    <div className='flex flex-col flex-grow'>
+                      <span className="text-secondary font-semibold">Benjamin Clark</span>
+                      <span className="text-sm text-gray-400 mt-2">23 APRIL</span>
+                      <p className="text-gray-500 mt-4">These guys know their stuff, and it shows in their products.</p>
+                    </div>
+                    <img src="/images/review-stars.png" alt="review-stars" />
+                  </div>
+
+                  <button className='flex items-center justify-center border border-slate-400 w-44 h-11 mt-20 rounded-md text-gray-500 transition duration-150 hover:bg-slate-50 active:bg-white'> 
+                    Load more reviews
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+            }
+          </div>
+
+
+        </div>
+      </section>
+
+
+
+      
     </main>
   );
 };
 
 export default Product;
+
+
+
+
+                            
+                          
+                    
