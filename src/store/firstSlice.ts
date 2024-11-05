@@ -5,7 +5,7 @@ interface FirstState {
 }
 
 const initialState: FirstState = {
-  value: 0,
+  value: 1,
 };
 
 const firstSlice = createSlice({
@@ -16,7 +16,9 @@ const firstSlice = createSlice({
       state.value += 1;
     },
     decrement(state) {
-      state.value -= 1;
+      if (state.value > 1) {
+        state.value -= 1;
+      }
     },
     setValue(state, action: PayloadAction<number>) {
       state.value = action.payload;

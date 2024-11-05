@@ -1,12 +1,17 @@
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Clothes } from '../components/clothes';
+import Counter from '../components/counter';
 
 const Product: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const product = Clothes.find(item => item.id.toString() === id);
 
   const [selectedColor, setSelectedColor] = useState <string | null> (null);
+
+  const [selectedSize, setSelectedSize] = useState<string | null>(null);
+  const sizes = ['S', 'M', 'L', 'XL', 'XXL'];
+
 
   if (!product) {
     return <div>Product not found</div>;
@@ -68,6 +73,46 @@ const Product: React.FC = () => {
                           ></button>
                      </div>
                   </div>
+
+
+                  <div className='flex flex-col ms-2 mt-6'>
+                      <span className='text-xs font-medium text-slate-500'> SELECT SIZE </span> 
+                      <div className="flex gap-2 mt-4">
+                        {sizes.map((size) => (
+                          <button
+                            key={size}
+                            onClick={() => setSelectedSize(size)}
+                            className={`w-10 h-10 rounded-md border transition duration-150 ${
+                            selectedSize === size ? 'border-black' : 'border-gray-200'
+                            }`}>
+                                {size}
+                              </button>
+                            ))}
+                      </div>
+                  </div>
+
+
+                  <div className='flex flex-col ms-2 mt-8'>
+                      <span className='text-xs font-medium text-slate-500'> QUANTITY </span> 
+                      <div className='rounded-md'>
+                        <Counter/>
+                      </div>
+                  </div>
+
+                  <div className='flex items-center justify-center gap-4 ms-2 mt-12 mb-6'>
+                     <button className='w-72 h-11 rounded-md flex items-center justify-center bg-[#0E1422] text-white transition duration-150 hover:bg-slate-800 active:bg-[#0E1422]'>
+                         Add to cart
+                      </button>
+
+                     <button className='w-11 h-11 rounded-md border flex items-center justify-center transition duration-150 hover:bg-slate-50 active:bg-white'> 
+                        <img src="/images/Heart.png" alt="Heart" />
+                     </button>
+                  </div>
+                 
+
+                  <span className='text-xs font-medium text-slate-500 ms-2'>— Free shipping on orders $100+</span>
+
+ 
               </div>
             </div>
           </div>
