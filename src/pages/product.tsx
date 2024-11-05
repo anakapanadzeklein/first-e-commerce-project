@@ -1,9 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Clothes } from '../components/clothes';
 import Counter from '../components/counter';
+import { useLocation } from 'react-router-dom';
+
 
 const Product: React.FC = () => {
+
+  const location = useLocation();
+  const { pathname } = location;
+
   const { id } = useParams<{ id: string }>();
   const product = Clothes.find(item => item.id.toString() === id);
 
@@ -13,6 +20,10 @@ const Product: React.FC = () => {
   const sizes = ['S', 'M', 'L', 'XL', 'XXL'];
 
   const [selectedButton, setSelectedButton] = useState <string | null> (null);
+
+    useEffect(()=> {
+      window.scrollTo(0, 0)
+  },[pathname])
 
 
   if (!product) {
@@ -124,17 +135,17 @@ const Product: React.FC = () => {
 
 
 
-      <section className='w-full gap-16' style={{ backgroundColor: '#FFF', paddingBottom: '200px' }}>
+      <section className='w-full gap-16' style={{ backgroundColor: '#FFF', paddingBottom: '120px' }}>
         <div className='flex items-center gap-3 mt-8 mx-28'>
 
 
           <div className='w-60 h-24 flex flex-col justify-between'>
-            <button className={`flex items-center gap-2 w-60 h-10 rounded-md ps-6 bg-white transition duration-150 ${selectedButton === "details" ? 'bg-[#F6F6F6]' : ''}`} onClick={() => setSelectedButton("details")}>
+            <button className={`flex items-center gap-2 w-60 h-10 rounded-md ps-6 bg-white transition duration-150 hover:bg-[#F6F6F6] active:bg-white ${selectedButton === "details" ? 'bg-[#F6F6F6]' : ''}`} onClick={() => setSelectedButton("details")}>
               <img src="/images/three-dots.png" alt="three-dots" />
               <span> Details </span>
             </button>
 
-            <button className={`flex items-center gap-2 w-60 h-10 rounded-md ps-6 bg-white transition duration-150 ${selectedButton === "reviews" ? 'bg-[#F6F6F6]' : ''}`} onClick={() => setSelectedButton("reviews")}>
+            <button className={`flex items-center gap-2 w-60 h-10 rounded-md ps-6 bg-white transition duration-150 hover:bg-[#F6F6F6] active:bg-white ${selectedButton === "reviews" ? 'bg-[#F6F6F6]' : ''}`} onClick={() => setSelectedButton("reviews")}>
               <img src="/images/Empty-Star.png" alt="empty-star" />
               <span> Reviews </span>
             </button>
@@ -229,7 +240,30 @@ const Product: React.FC = () => {
 
 
 
-      
+      <section className='w-full flex flex-col ms-2'>
+        <div className='flex flex-col text-start mb-6 ms-6'>
+          <h1 className='text-2xl font-bold mt-3 mb-3'>You might also like</h1>
+          <span className='text-xs ms-1' style={{ color: '#878A92' }}>SIMILAR PRODUCTS</span>
+        </div>
+
+        <div className="grid grid-cols-4 gap-4 justify-between mt-14 mb-40">
+            {Clothes.slice(0, 4).map((clothes) => (
+            <Link to={`/items/${clothes.id}`} key={clothes.id}>
+              <div className="flex flex-col gap-2 items-start bg-white p-4">
+                <img src={clothes.image} alt={clothes.name} className="bg-gray-100 w-72" />
+                <span className="font-medium text-secondary">{clothes.name}</span>
+                <div className="flex gap-3 items-center">
+                  <span className={`text-secondary font-medium border border-gray-300 px-3 py-1 rounded-3xl ${clothes.instock ? 'bg-white' : 'bg-red-100'}`}>
+                    {clothes.instock ? 'IN STOCK' : 'OUT OF STOCK'}
+                  </span>
+                  <span className="text-gray-400 font-normal">${clothes.price}</span>
+                </div>
+              </div>
+            </Link>
+          ))}
+        </div>
+
+      </section>
     </main>
   );
 };
