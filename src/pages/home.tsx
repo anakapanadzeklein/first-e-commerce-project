@@ -12,7 +12,7 @@ const Home: React.FC = () => {
           <p className='text-sm font-normal mt-4' style={{ color: '#474B57' }}> Discover Our Newest Collection Today. </p>
           
           <button className='text-white text-sm flex items-center justify-center rounded mt-12' style={{ backgroundColor: '#0E1422', width: '183px', height: '44px' }}>
-            <span> View Collection </span>
+           <span> <Link to="/categories"> View Collection </Link> </span>
             <img src="/images/ArrowRight.png" alt="right-arrow" className='pl-3' />
           </button>
         </div>
@@ -56,8 +56,8 @@ const Home: React.FC = () => {
             {Clothes.slice(0, 4).map((clothes) => (
             <Link to={`/items/${clothes.id}`} key={clothes.id}>
               <div className="flex flex-col gap-2 items-start bg-white p-4">
-                <img src={clothes.image} alt={clothes.name} className="bg-gray-100 w-72" />
-                <span className="font-medium text-secondary">{clothes.name}</span>
+                <img src={clothes.image} alt={clothes.title} className="bg-gray-100 w-72" />
+                <span className="font-medium text-secondary">{clothes.title}</span>
                 <div className="flex gap-3 items-center">
                   <span className={`text-secondary font-medium border border-gray-300 px-3 py-1 rounded-3xl ${clothes.instock ? 'bg-white' : 'bg-red-100'}`}>
                     {clothes.instock ? 'IN STOCK' : 'OUT OF STOCK'}
@@ -77,7 +77,7 @@ const Home: React.FC = () => {
           <h1 className='text-2xl font-bold'>Browse Our Fashion Paradise!</h1>
           <p className='text-sm' style={{ color: '#5C5F6A' }}>Step into a world of style and explore our diverse collection of clothing categories.</p>
           <button className='text-white text-sm flex items-center justify-center rounded mt-12' style={{ backgroundColor: '#0E1422', width: '183px', height: '44px' }}>
-            <span> Start Browsing </span>
+            <span>  <Link to="/categories"> Start Browsing </Link> </span>
             <img src="/images/ArrowRight.png" alt="right-arrow" className='pl-3' />
           </button>
         </div>
@@ -98,8 +98,8 @@ const Home: React.FC = () => {
             {Clothes.slice(4, 8).map((clothes) => (
             <Link to={`/items/${clothes.id}`} key={clothes.id}>
               <div className="flex flex-col gap-2 items-start bg-white p-4">
-                <img src={clothes.image} alt={clothes.name} className="bg-gray-100 w-72" />
-                <span className="font-medium text-secondary">{clothes.name}</span>
+                <img src={clothes.image} alt={clothes.title} className="bg-gray-100 w-72" />
+                <span className="font-medium text-secondary">{clothes.title}</span>
                 <div className="flex gap-3 items-center">
                   <span className={`text-secondary font-medium border border-gray-300 px-3 py-1 rounded-3xl ${clothes.instock ? 'bg-white' : 'bg-red-100'}`}>
                     {clothes.instock ? 'IN STOCK' : 'OUT OF STOCK'}

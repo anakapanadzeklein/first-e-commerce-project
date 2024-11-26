@@ -4,6 +4,8 @@ import { Link } from 'react-router-dom';
 import { Clothes } from '../components/clothes';
 import Counter from '../components/counter';
 import { useLocation } from 'react-router-dom';
+import { ClothesTypes } from '../types/clothestypes';
+import { ProductApi } from "../types/clothesapitypes";
 
 
 const Product: React.FC = () => {
@@ -12,7 +14,6 @@ const Product: React.FC = () => {
   const { pathname } = location;
 
   const { id } = useParams<{ id: string }>();
-  const product = Clothes.find(item => item.id.toString() === id);
 
   const [selectedColor, setSelectedColor] = useState <string | null> (null);
 
@@ -21,9 +22,36 @@ const Product: React.FC = () => {
 
   const [selectedButton, setSelectedButton] = useState <string | null> (null);
 
+  const [products, setProducts] = useState<(ClothesTypes | ProductApi)[]>([]);
+
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await fetch('https://fakestoreapi.com/products');
+        if (!response.ok) {
+          throw new Error(`Error ${response.status}`);
+        }
+
+        const data: ProductApi[] = await response.json();
+
+        const formattedData = data.map((product) => ({...product, instock: true}));
+
+        setProducts([...Clothes, ...formattedData]);
+      }
+       catch (error) {
+        console.error('Error fetching products:', error);
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
     useEffect(()=> {
       window.scrollTo(0, 0)
   },[pathname])
+
+  const product = products.find(item => item.id.toString() === id);
 
 
   if (!product) {
@@ -41,13 +69,13 @@ const Product: React.FC = () => {
 
           <div className='mx-28 flex items-center justify-center gap-4' style={{ width:'1092px', height: '574px', marginTop: '30px' }}>
             <div className='flex items-center justify-center flex-col py-8 px-8' style={{ backgroundColor: '#F6F6F6', width:'574px', height: '574px' }}>
-                <img src={product.image} alt={product.name} style={{ width:'374.4px', height:'471px' }}/>
+                <img src={product.image} alt={product.title} style={{ width:'374.4px', height:'471px' }}/>
                 <img src="/images/Dots.png" alt="dots" />
             </div>
 
             <div className='flex items-start flex-col' style={{ width:'574px', height: '574px' }}>
               <div className='ps-28 items-start'>
-                  <h1 className='text-2xl font-bold ms-1'>{product.name}</h1>
+                  <h1 className='text-2xl font-bold ms-1'>{product.title}</h1>
 
                   <div className='flex gap-2 mt-3 mb-6'>
                         <div className='rounded-full flex items-center justify-center gap-3' style={{ backgroundColor: '#F6F6F6', width:'167px', height:'28px' }}>
@@ -121,16 +149,11 @@ const Product: React.FC = () => {
                         <img src="/images/Heart.png" alt="Heart" />
                      </button>
                   </div>
-                 
-
                   <span className='text-xs font-medium text-slate-500 ms-2'>— Free shipping on orders $100+</span>
               </div>
             </div>
           </div>
       </section>
-
-
-
 
 
 
@@ -202,7 +225,6 @@ const Product: React.FC = () => {
                     <img src="/images/review-stars.png" alt="review-stars" className="ml-3" />
                   </div>
 
-          
                   <div className='flex items-start mt-14' style={{ width: '727px' }}>
                     <img src="/images/Avatar.png" alt="avatar" className="mr-3" />
                     <div className='flex flex-col flex-grow'>
@@ -250,8 +272,8 @@ const Product: React.FC = () => {
             {Clothes.slice(0, 4).map((clothes) => (
             <Link to={`/items/${clothes.id}`} key={clothes.id}>
               <div className="flex flex-col gap-2 items-start bg-white p-4">
-                <img src={clothes.image} alt={clothes.name} className="bg-gray-100 w-72" />
-                <span className="font-medium text-secondary">{clothes.name}</span>
+                <img src={clothes.image} alt={clothes.title} className="bg-gray-100 w-72" />
+                <span className="font-medium text-secondary">{clothes.title}</span>
                 <div className="flex gap-3 items-center">
                   <span className={`text-secondary font-medium border border-gray-300 px-3 py-1 rounded-3xl ${clothes.instock ? 'bg-white' : 'bg-red-100'}`}>
                     {clothes.instock ? 'IN STOCK' : 'OUT OF STOCK'}
@@ -269,10 +291,3 @@ const Product: React.FC = () => {
 };
 
 export default Product;
-
-
-
-
-                            
-                          
-                    
