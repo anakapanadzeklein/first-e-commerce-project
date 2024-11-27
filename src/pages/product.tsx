@@ -51,7 +51,44 @@ const Product: React.FC = () => {
       window.scrollTo(0, 0)
   },[pathname])
 
-  const product = products.find(item => item.id.toString() === id);
+  const product = products.find(products => products.id.toString() === id);
+
+  const handleAddToCart = () => {
+    if (!selectedSize) {
+      alert("Please select a size before adding to the cart.");
+      return;
+    }
+  
+    if (!product) {
+      alert("Product not found.");
+      return;
+    }
+  
+    const existingCart = JSON.parse(localStorage.getItem("cart") || "[]");
+  
+    const existingItemIndex = existingCart.findIndex(
+      (cartItem: any) => cartItem.id === product.id && cartItem.size === selectedSize
+    );
+  
+    if (existingItemIndex !== -1) {
+      existingCart[existingItemIndex].quantity += 1;
+    } else {
+      const cartItem = {
+        id: product.id,
+        title: product.title,
+        price: product.price,
+        image: product.image,
+        size: selectedSize,
+        quantity: 1,
+      };
+      existingCart.push(cartItem);
+    }
+  
+    localStorage.setItem("cart", JSON.stringify(existingCart));
+  
+    alert("Item added to cart!");
+  };
+  
 
 
   if (!product) {
@@ -141,7 +178,7 @@ const Product: React.FC = () => {
                   </div>
 
                   <div className='flex items-center justify-center gap-4 ms-2 mt-12 mb-6'>
-                     <button className='w-72 h-11 rounded-md flex items-center justify-center bg-[#0E1422] text-white transition duration-150 hover:bg-slate-800 active:bg-[#0E1422]'>
+                     <button onClick={handleAddToCart} className='w-72 h-11 rounded-md flex items-center justify-center bg-[#0E1422] text-white transition duration-150 hover:bg-slate-800 active:bg-[#0E1422]'>
                          Add to cart
                       </button>
 
@@ -164,12 +201,12 @@ const Product: React.FC = () => {
 
           <div className='w-60 h-24 flex flex-col justify-between'>
             <button className={`flex items-center gap-2 w-60 h-10 rounded-md ps-6 bg-white transition duration-150 hover:bg-[#F6F6F6] active:bg-white ${selectedButton === "details" ? 'bg-[#F6F6F6]' : ''}`} onClick={() => setSelectedButton("details")}>
-              <img src="/images/three-dots.png" alt="three-dots" />
+              <img src="/images/three-dots.png"/>
               <span> Details </span>
             </button>
 
             <button className={`flex items-center gap-2 w-60 h-10 rounded-md ps-6 bg-white transition duration-150 hover:bg-[#F6F6F6] active:bg-white ${selectedButton === "reviews" ? 'bg-[#F6F6F6]' : ''}`} onClick={() => setSelectedButton("reviews")}>
-              <img src="/images/Empty-Star.png" alt="empty-star" />
+              <img src="/images/Empty-Star.png" />
               <span> Reviews </span>
             </button>
           </div>

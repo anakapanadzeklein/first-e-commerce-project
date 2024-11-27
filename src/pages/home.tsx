@@ -11,10 +11,10 @@ const Home: React.FC = () => {
           <h1 className='text-3xl font-semibold pl-0.5' style={{ color: '#202533' }}> Fresh Arrivals Online </h1>
           <p className='text-sm font-normal mt-4' style={{ color: '#474B57' }}> Discover Our Newest Collection Today. </p>
           
-          <button className='text-white text-sm flex items-center justify-center rounded mt-12' style={{ backgroundColor: '#0E1422', width: '183px', height: '44px' }}>
-           <span> <Link to="/categories"> View Collection </Link> </span>
+          <Link to="/categories"><button className='text-white text-sm flex items-center justify-center rounded mt-12' style={{ backgroundColor: '#0E1422', width: '183px', height: '44px' }}>
+            <span> View Collection </span>
             <img src="/images/ArrowRight.png" alt="right-arrow" className='pl-3' />
-          </button>
+          </button></Link>
         </div>
 
         <img src="/images/Man.png" alt="man" style={{ width: '340px', height: '340px', marginTop: '98px' }} />
@@ -76,10 +76,10 @@ const Home: React.FC = () => {
         <div style={{width: '450px'}}>
           <h1 className='text-2xl font-bold'>Browse Our Fashion Paradise!</h1>
           <p className='text-sm' style={{ color: '#5C5F6A' }}>Step into a world of style and explore our diverse collection of clothing categories.</p>
-          <button className='text-white text-sm flex items-center justify-center rounded mt-12' style={{ backgroundColor: '#0E1422', width: '183px', height: '44px' }}>
-            <span>  <Link to="/categories"> Start Browsing </Link> </span>
+          <Link to="/categories">< button className='text-white text-sm flex items-center justify-center rounded mt-12' style={{ backgroundColor: '#0E1422', width: '183px', height: '44px' }}>
+            <span> Start Browsing </span>
             <img src="/images/ArrowRight.png" alt="right-arrow" className='pl-3' />
-          </button>
+          </button></Link>
         </div>
 
         <div>
