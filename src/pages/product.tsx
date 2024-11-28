@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { Link } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { Clothes } from '../components/clothes';
 import Counter from '../components/counter';
-import { useLocation } from 'react-router-dom';
 import { ClothesTypes } from '../types/clothestypes';
-import { ProductApi } from "../types/clothesapitypes";
+import { ProductApi } from '../types/clothesapitypes';
+import { Link } from 'react-router-dom';
 
 
 const Product: React.FC = () => {
@@ -15,18 +15,28 @@ const Product: React.FC = () => {
 
   const { id } = useParams<{ id: string }>();
 
-  const [selectedColor, setSelectedColor] = useState <string | null> (null);
-
-  const [selectedSize, setSelectedSize] = useState <string | null> (null);
-  const sizes = ['S', 'M', 'L', 'XL', 'XXL'];
+  const [selectedColor, setSelectedColor] = useState<string | null>(null);
+  const [selectedSize, setSelectedSize] = useState<string | null>(null);
+  const [quantity, setQuantity] = useState(1);
 
   const [selectedButton, setSelectedButton] = useState <string | null> (null);
+
+  const colors: { name: string; hex: string }[] = [
+    { name: 'Light Blue', hex: '#A3BEF8' },
+    { name: 'Yellow', hex: '#FFD58A' },
+    { name: 'Green', hex: '#83B18B' },
+  ];
+
+  const sizes = ['S', 'M', 'L', 'XL', 'XXL'];
 
   const [products, setProducts] = useState<(ClothesTypes | ProductApi)[]>([]);
 
 
+
   useEffect(() => {
+
     const fetchProducts = async () => {
+
       try {
         const response = await fetch('https://fakestoreapi.com/products');
         if (!response.ok) {
@@ -34,44 +44,54 @@ const Product: React.FC = () => {
         }
 
         const data: ProductApi[] = await response.json();
-
-        const formattedData = data.map((product) => ({...product, instock: true}));
+        const formattedData = data.map((product) => ({
+          ...product,
+          instock: true,
+        }));
 
         setProducts([...Clothes, ...formattedData]);
-      }
-       catch (error) {
+      } catch (error) {
         console.error('Error fetching products:', error);
       }
+
     };
 
+
     fetchProducts();
+
   }, []);
 
-    useEffect(()=> {
-      window.scrollTo(0, 0)
-  },[pathname])
 
-  const product = products.find(products => products.id.toString() === id);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+
+
+
+  const product = products.find((product) => product.id.toString() === id);
+
+
 
   const handleAddToCart = () => {
-    if (!selectedSize) {
-      alert("Please select a size before adding to the cart.");
+
+    if (!selectedColor || !selectedSize) {
+      alert('Please select a color and a size before adding to the cart.');
       return;
     }
-  
+
     if (!product) {
-      alert("Product not found.");
+      alert('Product not found.');
       return;
     }
-  
-    const existingCart = JSON.parse(localStorage.getItem("cart") || "[]");
-  
+
+    const existingCart = JSON.parse(localStorage.getItem('cart') || '[]');
     const existingItemIndex = existingCart.findIndex(
-      (cartItem: any) => cartItem.id === product.id && cartItem.size === selectedSize
+      (cartItem: any) => cartItem.id === product.id && cartItem.size === selectedSize && cartItem.color === selectedColor
     );
-  
+
     if (existingItemIndex !== -1) {
-      existingCart[existingItemIndex].quantity += 1;
+      existingCart[existingItemIndex].quantity += quantity;
     } else {
       const cartItem = {
         id: product.id,
@@ -79,120 +99,118 @@ const Product: React.FC = () => {
         price: product.price,
         image: product.image,
         size: selectedSize,
-        quantity: 1,
+        color: selectedColor,
+        quantity,
       };
       existingCart.push(cartItem);
     }
-  
-    localStorage.setItem("cart", JSON.stringify(existingCart));
-  
-    alert("Item added to cart!");
+
+    localStorage.setItem('cart', JSON.stringify(existingCart));
+    alert('Item added to cart!');
+
   };
-  
+
+
 
 
   if (!product) {
     return <div>Product not found</div>;
   }
 
-  return (    
+  return (
     <main className='mx-auto max-w-[1440px] px-5'>
       <section className='w-full gap-16' style={{ backgroundColor: '#FFF', paddingBottom: '120px' }}>
-          <div className='flex items-center gap-3 mt-8 mx-28'>
-            <span className='text-slate-500'> Ecommerce </span>
-            <img src="/images/Vector-right.png" alt="right-arrow" className='w-2 h-3' />
-            <span> Black man t-shirt </span>
+        <div className='flex items-center gap-3 mt-8 mx-28'>
+          <span className='text-slate-500'> Ecommerce </span>
+          <img src="/images/Vector-right.png" alt="right-arrow" className='w-2 h-3' />
+          <span> Black man t-shirt </span>
+        </div>
+
+        <div className='mx-28 flex items-center justify-center gap-4' style={{ width:'1092px', height: '574px', marginTop: '30px' }}>
+          <div className='flex items-center justify-center flex-col py-8 px-8' style={{ backgroundColor: '#F6F6F6', width:'574px', height: '574px' }}>
+            <img src={product.image} alt={product.title} style={{ width:'374.4px', height:'471px' }}/>
+            <img src="/images/Dots.png" alt="dots" />
           </div>
 
-          <div className='mx-28 flex items-center justify-center gap-4' style={{ width:'1092px', height: '574px', marginTop: '30px' }}>
-            <div className='flex items-center justify-center flex-col py-8 px-8' style={{ backgroundColor: '#F6F6F6', width:'574px', height: '574px' }}>
-                <img src={product.image} alt={product.title} style={{ width:'374.4px', height:'471px' }}/>
-                <img src="/images/Dots.png" alt="dots" />
-            </div>
+          <div className='flex items-start flex-col' style={{ width:'574px', height: '574px' }}>
+            <div className='ps-28 items-start'>
+              <h1 className='text-2xl font-bold ms-1'>{product.title}</h1>
 
-            <div className='flex items-start flex-col' style={{ width:'574px', height: '574px' }}>
-              <div className='ps-28 items-start'>
-                  <h1 className='text-2xl font-bold ms-1'>{product.title}</h1>
+              <div className='flex gap-2 mt-3 mb-6'>
+                <div className='rounded-full flex items-center justify-center gap-3' style={{ backgroundColor: '#F6F6F6', width:'167px', height:'28px' }}>
+                  <img src="/images/Star.png" alt="star" />
+                  <span className='font-medium text-xs text-slate-500'> 4.2 — 54 Reviews </span>
+                </div>
 
-                  <div className='flex gap-2 mt-3 mb-6'>
-                        <div className='rounded-full flex items-center justify-center gap-3' style={{ backgroundColor: '#F6F6F6', width:'167px', height:'28px' }}>
-                            <img src="/images/Star.png" alt="star" />
-                            <span className='font-medium text-xs text-slate-500'> 4.2 — 54 Reviews </span>
-                        </div>
-
-                        <span className="font-medium text-xs text-slate-500 border border-gray-300 px-3 py-1 rounded-3xl bg-white" style={{ height:'28px' }}>
-                          {product.instock ? 'In Stock' : 'Out of Stock'}
-                        </span>
-                  </div>
-
-                  <span className='text-lg font-semibold ms-2'>${product.price}</span>
-
-                  <div className='flex flex-col ms-2 mt-8'>
-                     <span className='text-xs font-medium text-slate-500'> AVAILABLE COLORS </span>
-
-                     <div className='flex gap-4 mt-4'>
-                          <button
-                            onClick={() => setSelectedColor('#A3BEF8')}
-                            className={`w-6 h-6 rounded-full bg-[#A3BEF8] transition duration-150 hover:bg-indigo-200 ${
-                              selectedColor === '#A3BEF8' ? 'border border-black' : ''
-                            }`}
-                          ></button>
-                          <button
-                            onClick={() => setSelectedColor('#FFD58A')}
-                            className={`w-6 h-6 rounded-full bg-[#FFD58A] transition duration-150 hover:bg-orange-100 ${
-                              selectedColor === '#FFD58A' ? 'border border-black' : ''
-                            }`}
-                          ></button>
-                          <button
-                            onClick={() => setSelectedColor('#83B18B')}
-                            className={`w-6 h-6 rounded-full bg-[#83B18B] transition duration-150 hover:bg-lime-100 ${
-                              selectedColor === '#83B18B' ? 'border border-black' : ''
-                            }`}
-                          ></button>
-                     </div>
-                  </div>
-
-
-                  <div className='flex flex-col ms-2 mt-6'>
-                      <span className='text-xs font-medium text-slate-500'> SELECT SIZE </span> 
-                      <div className="flex gap-2 mt-4">
-                        {sizes.map((size) => (
-                          <button
-                            key={size}
-                            onClick={() => setSelectedSize(size)}
-                            className={`w-10 h-10 rounded-md border transition duration-150 ${
-                            selectedSize === size ? 'border-black' : 'border-gray-200'
-                            }`}>
-                                {size}
-                              </button>
-                            ))}
-                      </div>
-                  </div>
-
-
-                  <div className='flex flex-col ms-2 mt-8'>
-                      <span className='text-xs font-medium text-slate-500'> QUANTITY </span> 
-                      <div className='rounded-md'>
-                        <Counter/>
-                      </div>
-                  </div>
-
-                  <div className='flex items-center justify-center gap-4 ms-2 mt-12 mb-6'>
-                     <button onClick={handleAddToCart} className='w-72 h-11 rounded-md flex items-center justify-center bg-[#0E1422] text-white transition duration-150 hover:bg-slate-800 active:bg-[#0E1422]'>
-                         Add to cart
-                      </button>
-
-                     <button className='w-11 h-11 rounded-md border flex items-center justify-center transition duration-150 hover:bg-slate-50 active:bg-white'> 
-                        <img src="/images/Heart.png" alt="Heart" />
-                     </button>
-                  </div>
-                  <span className='text-xs font-medium text-slate-500 ms-2'>— Free shipping on orders $100+</span>
+                <span className="font-medium text-xs text-slate-500 border border-gray-300 px-3 py-1 rounded-3xl bg-white" style={{ height:'28px' }}>
+                  {product.instock ? 'In Stock' : 'Out of Stock'}
+                </span>
               </div>
+
+              <span className='text-lg font-semibold ms-2'>${product.price}</span>
+
+              <div className='flex flex-col ms-2 mt-8'>
+                <span className='text-xs font-medium text-slate-500'> AVAILABLE COLORS </span>
+                <div className="flex gap-4 mt-4">
+                  {colors.map((color) => (
+                    <button
+                      key={color.name}
+                      onClick={() => setSelectedColor(color.hex)}
+                      className={`w-6 h-6 rounded-full bg-[${color.hex}] transition duration-150 hover:bg-opacity-80 ${
+                        selectedColor === color.hex ? 'border border-black' : ''
+                      }`}
+                    ></button>
+                  ))}
+                </div>
+              </div>
+
+              <div className='flex flex-col ms-2 mt-6'>
+                <span className='text-xs font-medium text-slate-500'> SELECT SIZE </span> 
+                <div className="flex gap-2 mt-4">
+                  {sizes.map((size) => (
+                    <button
+                      key={size}
+                      onClick={() => setSelectedSize(size)}
+                      className={`w-10 h-10 rounded-md border transition duration-150 ${
+                      selectedSize === size ? 'border-black' : 'border-gray-200'
+                      }`}>
+                      {size}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Quantity Counter */}
+              <div className="mt-6 ms-2">
+                <Counter
+                  itemId={product.id}
+                  quantity={quantity}
+                  onIncrement={() => setQuantity((prev) => prev + 1)}
+                  onDecrement={() => setQuantity((prev) => Math.max(1, prev - 1))}
+                />
+              </div>
+
+              <div className="flex items-center justify-center gap-4 ms-2 mt-12 mb-6">
+              <Link to={selectedColor && selectedSize ? "/shoppingcart" : "#"}>
+                <button
+                  onClick={handleAddToCart}
+                  className="w-72 h-11 rounded-md flex items-center justify-center bg-[#0E1422] text-white transition duration-150 cursor-pointer hover:bg-slate-800 active:bg-[#0E1422]"
+                  disabled={!selectedColor || !selectedSize}
+                >
+                  Add to cart
+                </button>
+              </Link>
+
+              <button className="w-11 h-11 rounded-md border flex items-center justify-center transition duration-150 hover:bg-slate-50 active:bg-white">
+                <img src="/images/Heart.png" alt="Heart" />
+              </button>
+            </div>
+            <span className="text-xs font-medium text-slate-500 ms-2">— Free shipping on orders $100+</span>
+
             </div>
           </div>
+        </div>
       </section>
-
-
 
 
       <section className='w-full gap-16' style={{ backgroundColor: '#FFF', paddingBottom: '120px' }}>
@@ -295,33 +313,6 @@ const Product: React.FC = () => {
 
 
         </div>
-      </section>
-
-
-
-      <section className='w-full flex flex-col ms-2'>
-        <div className='flex flex-col text-start mb-6 ms-6'>
-          <h1 className='text-2xl font-bold mt-3 mb-3'>You might also like</h1>
-          <span className='text-xs ms-1' style={{ color: '#878A92' }}>SIMILAR PRODUCTS</span>
-        </div>
-
-        <div className="grid grid-cols-4 gap-4 justify-between mt-14 mb-40">
-            {Clothes.slice(0, 4).map((clothes) => (
-            <Link to={`/items/${clothes.id}`} key={clothes.id}>
-              <div className="flex flex-col gap-2 items-start bg-white p-4">
-                <img src={clothes.image} alt={clothes.title} className="bg-gray-100 w-72" />
-                <span className="font-medium text-secondary">{clothes.title}</span>
-                <div className="flex gap-3 items-center">
-                  <span className={`text-secondary font-medium border border-gray-300 px-3 py-1 rounded-3xl ${clothes.instock ? 'bg-white' : 'bg-red-100'}`}>
-                    {clothes.instock ? 'IN STOCK' : 'OUT OF STOCK'}
-                  </span>
-                  <span className="text-gray-400 font-normal">${clothes.price}</span>
-                </div>
-              </div>
-            </Link>
-          ))}
-        </div>
-
       </section>
     </main>
   );
