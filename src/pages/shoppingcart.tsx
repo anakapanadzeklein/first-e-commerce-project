@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Counter from '../components/counter';
 import { CartItem } from '../types/cartitemtypes';
+import OrderSummary from '../components/ordersummary';
 
 const ShoppingCart: React.FC = () => {
 
@@ -168,34 +169,8 @@ const ShoppingCart: React.FC = () => {
 
 
 
-            <div className="w-[341px] h-[430px] p-7 border border-[#E6E7E8] rounded">
-                <h2 className="text-base font-semibold mb-10">Order Summary</h2>
-                <div className="flex justify-between items-center mb-4">
-                    <span className="text-gray-500">Total Items:</span>
-                    <span>{cart.reduce((sum, item) => sum + item.quantity, 0)}</span>
-                </div>
-                <div className="flex justify-between items-center mb-4">
-                    <span className="text-gray-500">Subtotal:</span>
-                    <span>$ {totalPrice}</span>
-                </div>
-                <div className="flex justify-between items-center mb-4">
-                    <span className="text-gray-500"> Shipping: </span>
-                    <span> Free </span>
-                </div>
-                <div className="flex justify-between items-center mb-7">
-                    <span className="text-gray-500"> Tax: </span>
-                    <span> $ 3.00 </span>
-                </div>
-                <div className='border-b border-[#E9E9EB]'></div>
-                <div className='flex justify-between items-center mb-4 mt-5'>
-                    <span className="text-gray-500">Total:</span>
-                    <span>$ {finalPrice}</span>
-                </div>
-                <Link to="/checkout">
-                    <button className="block w-full bg-black text-white py-2 px-4 rounded-md text-center hover:bg-gray-800 mt-10w-72 h-11 rounded-md flex items-center justify-center bg-[#0E1422] text-white transition duration-150 cursor-pointer hover:bg-slate-800 active:bg-[#0E1422]">
-                        Checkout
-                    </button>
-                </Link>
+            <div>
+               <OrderSummary cart={cart} totalPrice={totalPrice} finalPrice={finalPrice} />
             </div>
 
 

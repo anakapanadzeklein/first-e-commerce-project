@@ -9,6 +9,8 @@ import Profile from './pages/profile';
 import Header from './components/header';
 import Footer from './components/footer';
 import Product from './pages/product';
+import Checkout from './pages/checkout';
+import AfterPayment from './pages/afterpayment';
 
 const App: React.FC = () => {
   return (
@@ -20,6 +22,8 @@ const App: React.FC = () => {
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/shoppingcart" element={<ShoppingCart />} />
+        <Route path="/checkout" element={<Checkout />} />
+        <Route path="/afterpayment" element={<AfterPayment />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/items/:id" element={<Product />} /> 
       </Routes>

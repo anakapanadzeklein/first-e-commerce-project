@@ -152,16 +152,18 @@ const Product: React.FC = () => {
               <div className='flex flex-col ms-2 mt-8'>
                 <span className='text-xs font-medium text-slate-500'> AVAILABLE COLORS </span>
                 <div className="flex gap-4 mt-4">
-                  {colors.map((color) => (
-                    <button
-                      key={color.name}
-                      onClick={() => setSelectedColor(color.hex)}
-                      className={`w-6 h-6 rounded-full bg-[${color.hex}] transition duration-150 hover:bg-opacity-80 ${
-                        selectedColor === color.hex ? 'border border-black' : ''
-                      }`}
-                    ></button>
-                  ))}
-                </div>
+                    {colors.map((color) => (
+                      <button
+                        key={color.name}
+                        onClick={() => setSelectedColor(color.hex)}
+                        style={{
+                          backgroundColor: color.hex,
+                          border: selectedColor === color.hex ? '1px solid black' : 'none',
+                        }}
+                        className="w-6 h-6 rounded-full transition duration-150 hover:opacity-80"
+                      ></button>
+                    ))}
+                 </div>
               </div>
 
               <div className='flex flex-col ms-2 mt-6'>
@@ -180,7 +182,6 @@ const Product: React.FC = () => {
                 </div>
               </div>
 
-              {/* Quantity Counter */}
               <div className="mt-6 ms-2">
                 <Counter
                   itemId={product.id}
